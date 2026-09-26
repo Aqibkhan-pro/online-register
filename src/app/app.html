@@ -21,6 +21,10 @@
       </a>
       <a href="#contact">Contact us</a>
     </nav>
+
+    @if (showDummyDataButton) {
+      <app-dummy-data-button (finished)="dummyDataFinished($event)" />
+    }
   </header>
 
   <main id="verification" class="page-content">
@@ -39,8 +43,8 @@
           </div>
           @if (searching()) {
             <p id="verification-status" class="status-message">Searching…</p>
-          } @else if (statusMessage()) {
-            <p id="verification-status" class="status-message error">{{ statusMessage() }}</p>
+          } @else if (status()) {
+            <p id="verification-status" class="status-message" [class.error]="status()?.error">{{ status()?.text }}</p>
           }
         </form>
       </section>

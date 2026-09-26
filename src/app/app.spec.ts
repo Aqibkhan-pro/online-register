@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
-import { ResultLookup } from './result/result-lookup';
+import { ResultStore } from './result/result-store';
 import { StudentResult } from './result/student-result';
 
 const sampleResult: StudentResult = {
@@ -24,7 +24,7 @@ describe('App', () => {
     await TestBed.configureTestingModule({
       imports: [App],
       // Stand-in for Firestore so tests never touch the network.
-      providers: [{ provide: ResultLookup, useValue: { find: async () => found } }]
+      providers: [{ provide: ResultStore, useValue: { find: async () => found } }]
     }).compileComponents();
   });
 
@@ -62,5 +62,11 @@ describe('App', () => {
   it('should show a message when no record is found', async () => {
     const element = await search('unknown-code');
     expect(element.querySelector('.status-message')?.textContent).toContain('No record found');
+  });
+
+  it('should not show the dummy data button', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    expect((fixture.nativeElement as HTMLElement).querySelector('app-dummy-data-button')).toBeNull();
   });
 });
