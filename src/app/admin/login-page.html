@@ -1,0 +1,18 @@
+<section class="panel login">
+  <h1>Admin Sign In</h1>
+  <p class="muted">Sign in to add and manage verification records.</p>
+
+  <form ngNativeValidate (ngSubmit)="signIn()">
+    <label for="email">Email</label>
+    <input id="email" name="email" class="input" type="email" autocomplete="username" required [(ngModel)]="email" />
+
+    <label for="password">Password</label>
+    <input id="password" name="password" class="input" type="password" autocomplete="current-password" required [(ngModel)]="password" />
+
+    @if (error()) {
+      <p class="form-error" role="alert">{{ error() }}</p>
+    }
+
+    <button type="submit" class="btn btn-primary" [disabled]="signingIn()">{{ signingIn() ? 'Signing in…' : 'Sign In' }}</button>
+  </form>
+</section>

@@ -1,0 +1,57 @@
+<section class="panel">
+  <div class="panel-head">
+    <div>
+      <h1>Add Record</h1>
+      <p class="muted">Grades, grade points, GPA and status are calculated from the marks.</p>
+    </div>
+    <a class="btn btn-outline" routerLink="/admin">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5m6-6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to Records
+    </a>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <h2>Student Details</h2>
+    <div class="fields">
+      <label>Verification Code<input class="input" formControlName="verificationCode" placeholder="UOL-2026-00125" /><small>Letters, numbers and dashes only.</small></label>
+      <label>Registration No<input class="input" formControlName="registrationNo" placeholder="2026-BCS-00125" /></label>
+      <label>Student Name<input class="input" formControlName="studentName" /></label>
+      <label>Program<input class="input" formControlName="program" placeholder="BS Computer Science" /></label>
+      <label>Campus<input class="input" formControlName="campus" placeholder="Lahore" /></label>
+      <label>Semester<input class="input" formControlName="semester" placeholder="Spring 2026" /></label>
+      <label>Roll No<input class="input" formControlName="rollNo" placeholder="CS-125" /></label>
+    </div>
+
+    <h2>Subjects</h2>
+    <div class="subjects" formArrayName="subjects">
+      <div class="subject-row subject-head" aria-hidden="true">
+        <span>Subject</span><span>Credit Hours</span><span>Marks</span><span>Grade</span><span>Grade Point</span><span></span>
+      </div>
+      @for (subject of subjects.controls; track subject; let i = $index) {
+        <div class="subject-row" [formGroupName]="i">
+          <input class="input" formControlName="name" placeholder="Subject name" aria-label="Subject name" />
+          <input class="input" formControlName="creditHours" type="number" min="1" max="6" aria-label="Credit hours" />
+          <input class="input" formControlName="marks" type="number" min="0" max="100" placeholder="0–100" aria-label="Marks" />
+          <span class="computed" data-label="Grade ">{{ grades()[i]?.grade ?? '—' }}</span>
+          <span class="computed" data-label="GP ">{{ (grades()[i]?.gradePoint | number: '1.2-2') ?? '—' }}</span>
+          <button type="button" class="remove" (click)="removeSubject(i)" [disabled]="subjects.length === 1" aria-label="Remove subject">×</button>
+        </div>
+      }
+      <button type="button" class="btn btn-outline add-subject" (click)="addSubject()">+ Add Subject</button>
+    </div>
+
+    <div class="summary">
+      <div><span>Semester GPA</span><strong>{{ summary() ? (summary()!.gpa | number: '1.2-2') : '—' }}</strong></div>
+      <div><span>Status</span><strong [class.fail]="summary()?.status === 'FAIL'">{{ summary()?.status ?? '—' }}</strong></div>
+    </div>
+
+    @if (error()) {
+      <p class="form-error" role="alert">{{ error() }}</p>
+    }
+
+    <div class="form-actions">
+      <a class="btn btn-outline" routerLink="/admin">Cancel</a>
+      <button type="submit" class="btn btn-primary" [disabled]="saving()">{{ saving() ? 'Saving…' : 'Save Record' }}</button>
+    </div>
+  </form>
+</section>

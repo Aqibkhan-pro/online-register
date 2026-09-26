@@ -1,22 +1,12 @@
-import { StudentResult, SubjectResult } from './student-result';
+import { gradeFor, summarize } from './grading';
+import { StudentResult } from './student-result';
 
 type Student = Pick<StudentResult, 'registrationNo' | 'studentName' | 'program' | 'campus' | 'rollNo'>;
 
-// HEC grading scale: minimum marks, grade, grade point.
-const GRADE_SCALE: [number, string, number][] = [
-  [85, 'A', 4], [80, 'A-', 3.67], [75, 'B+', 3.33], [71, 'B', 3], [68, 'B-', 2.67], [64, 'C+', 2.33],
-  [61, 'C', 2], [58, 'C-', 1.67], [54, 'D+', 1.33], [50, 'D', 1], [0, 'F', 0]
-];
-
 /** Builds a result from [subject, credit hours, marks] rows, deriving grades, GPA and status so the dummy data stays consistent. */
 function dummyResult(verificationCode: string, student: Student, semester: string, rows: [string, number, number][]): StudentResult {
-  const subjects: SubjectResult[] = rows.map(([name, creditHours, marks]) => {
-    const [, grade, gradePoint] = GRADE_SCALE.find(([minMarks]) => marks >= minMarks)!;
-    return { name, creditHours, marks, grade, gradePoint };
-  });
-  const totalCredits = subjects.reduce((sum, s) => sum + s.creditHours, 0);
-  const gpa = Math.round((subjects.reduce((sum, s) => sum + s.creditHours * s.gradePoint, 0) / totalCredits) * 100) / 100;
-  return { verificationCode, ...student, semester, subjects, gpa, status: gpa >= 2 ? 'PASS' : 'FAIL' };
+  const subjects = rows.map(([name, creditHours, marks]) => ({ name, creditHours, marks, ...gradeFor(marks) }));
+  return { verificationCode, ...student, semester, subjects, ...summarize(subjects) };
 }
 
 const ahmed: Student = { registrationNo: '2026-BCS-00125', studentName: 'Muhammad Ahmed', program: 'BS Computer Science', campus: 'Lahore', rollNo: 'CS-125' };

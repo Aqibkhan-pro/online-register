@@ -1,0 +1,36 @@
+@use 'admin';
+
+:host { display: block; width: min(1000px, 100%); margin: 0 auto; }
+
+* { box-sizing: border-box; }
+
+.panel-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.btn svg { width: 18px; height: 18px; }
+h2 { margin: 26px 0 12px; padding-bottom: 8px; border-bottom: 1px solid #e6e9e7; color: #174c26; font-size: 17px; font-weight: 600; }
+
+.fields { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px 18px; }
+.fields label { display: grid; align-content: start; gap: 6px; color: #33443a; font-size: 14px; font-weight: 500; }
+.fields small { color: #6b7a71; font-size: 12px; font-weight: 400; }
+
+.subjects { display: grid; gap: 8px; }
+.subject-row { display: grid; grid-template-columns: minmax(160px, 1fr) 110px 110px 70px 100px 36px; align-items: center; gap: 8px; }
+.subject-head { color: #5b6b62; font-size: 13px; font-weight: 600; }
+.computed { text-align: center; color: #174c26; font-weight: 600; }
+.remove { width: 36px; height: 36px; border: 1px solid #cfd6d1; border-radius: 6px; background: #fff; color: #b3261e; font-size: 20px; line-height: 1; cursor: pointer; }
+.remove:disabled { opacity: .35; cursor: default; }
+.add-subject { justify-self: start; margin-top: 4px; }
+
+.summary { display: grid; grid-template-columns: 1fr 1fr; margin-top: 22px; padding: 14px 18px; border-radius: 8px; background: #f1f7f3; }
+.summary div { display: grid; gap: 2px; }
+.summary span { color: #4b5b52; font-size: 14px; }
+.summary strong { color: #174c26; font-size: 24px; font-weight: 600; }
+.summary strong.fail { color: #b3261e; }
+
+.form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 22px; }
+
+@media (max-width: 700px) {
+  .subject-head { display: none; }
+  .subject-row { grid-template-columns: 1fr 1fr 1fr; padding: 10px; border: 1px solid #e6e9e7; border-radius: 8px; }
+  .subject-row input:first-child { grid-column: 1 / -1; }
+  .computed::before { content: attr(data-label); color: #5b6b62; font-weight: 400; }
+}

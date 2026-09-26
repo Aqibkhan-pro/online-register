@@ -1,6 +1,6 @@
 <div class="site-shell">
   <header class="topbar no-print">
-    <a class="brand" href="#home" aria-label="University of Lahore home">
+    <a class="brand" routerLink="/" aria-label="University of Lahore home">
       <svg class="brand-mark" viewBox="0 0 100 100" aria-hidden="true">
         <circle cx="50" cy="50" r="47" fill="none" stroke="currentColor" stroke-width="1.2"/>
         <path d="M17 75c14-2 22 10 38 8 13-2 19-12 29-8-12 10-27 15-43 14-10-1-18-6-24-14Z" fill="currentColor" opacity=".8"/>
@@ -12,43 +12,31 @@
     </a>
 
     <nav class="nav-links" aria-label="Primary navigation">
-      <a class="active" href="#home">Home</a>
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
       <a href="#admissions">Admissions</a>
       <a href="#uol">UOL</a>
-      <a class="verification-link" href="#verification">
+      <a class="verification-link" routerLink="/">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 8.6 12 4l9.5 4.6L12 13 2.5 8.6Zm3.2 2.2v5.5L12 20l6.3-3.7v-5.5L12 14l-6.3-3.2ZM20 10.1v5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
         Online Verification
       </a>
       <a href="#contact">Contact us</a>
     </nav>
 
-    @if (showDummyDataButton) {
-      <app-dummy-data-button (finished)="dummyDataFinished($event)" />
-    }
+    <div class="header-actions">
+      @if (auth.isAdmin()) {
+        <a class="header-button" routerLink="/admin">Admin Panel</a>
+        <button type="button" class="header-button" (click)="signOut()">Sign out</button>
+      } @else if (auth.user() !== undefined) {
+        <a class="header-button" routerLink="/login">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></g></svg>
+          Sign in
+        </a>
+      }
+    </div>
   </header>
 
   <main id="verification" class="page-content">
-    <h1>Online Verification</h1>
-    @if (results().length) {
-      <app-result-view [results]="results()" (back)="backToSearch()" />
-    } @else {
-      <section class="verification-card" aria-labelledby="verification-label">
-        <form (submit)="verify($event)">
-          <label id="verification-label" for="verification-code">Verification Code / Registration No:</label>
-          <div class="search-field">
-            <input id="verification-code" name="verification-code" type="search" placeholder="Search here..." [(ngModel)]="verificationCode" aria-describedby="verification-status" />
-            <button type="submit" aria-label="Search verification code" [disabled]="searching()">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.7" cy="10.7" r="5.9" fill="none" stroke="currentColor" stroke-width="2"/><path d="m15.1 15.1 5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-            </button>
-          </div>
-          @if (searching()) {
-            <p id="verification-status" class="status-message">Searching…</p>
-          } @else if (status()) {
-            <p id="verification-status" class="status-message" [class.error]="status()?.error">{{ status()?.text }}</p>
-          }
-        </form>
-      </section>
-    }
+    <router-outlet />
   </main>
 
   <footer id="contact" class="site-footer no-print">
@@ -62,7 +50,7 @@
       </section>
       <section>
         <h2>Important Links</h2>
-        <a href="#home">Home</a>
+        <a routerLink="/">Home</a>
         <a href="#result">Result</a>
         <a href="#contact">Contact</a>
       </section>

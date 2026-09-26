@@ -1,0 +1,70 @@
+<section class="panel">
+  <div class="panel-head">
+    <div>
+      <h1>Admin Panel</h1>
+      <p class="muted">Verification records stored in Firestore.</p>
+    </div>
+    <div class="head-actions">
+      @if (showDummyDataButton) {
+        <app-dummy-data-button (finished)="dummyDataFinished($event)" />
+      }
+      <a class="btn btn-primary" routerLink="/admin/new">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        Add Record
+      </a>
+    </div>
+  </div>
+
+  @if (notice()) {
+    <p class="form-success" role="status">{{ notice() }}</p>
+  }
+
+  <label class="search">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.7" cy="10.7" r="5.9" fill="none" stroke="currentColor" stroke-width="2"/><path d="m15.1 15.1 5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <input class="input" type="search" placeholder="Search by code, registration no, name, program…" aria-label="Search records" [ngModel]="search()" (ngModelChange)="setSearch($event)" />
+  </label>
+
+  @if (loading()) {
+    <p class="state">Loading records…</p>
+  } @else if (error()) {
+    <p class="form-error" role="alert">{{ error() }}</p>
+  } @else if (!filtered().length) {
+    <p class="state">{{ search() ? 'No records match "' + search() + '".' : 'No records yet. Use "Add Record" to create one.' }}</p>
+  } @else {
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th scope="col">Verification Code</th><th scope="col">Registration No</th><th scope="col">Student Name</th><th scope="col">Program</th><th scope="col">Semester</th><th scope="col">GPA</th><th scope="col">Status</th></tr>
+        </thead>
+        <tbody>
+          @for (record of pageRecords(); track record.verificationCode) {
+            <tr>
+              <td class="code">{{ record.verificationCode }}</td>
+              <td>{{ record.registrationNo }}</td>
+              <td>{{ record.studentName }}</td>
+              <td>{{ record.program }}</td>
+              <td>{{ record.semester }}</td>
+              <td>{{ record.gpa | number: '1.2-2' }}</td>
+              <td><span class="status" [class.fail]="!isPass(record)">{{ record.status }}</span></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <nav class="pagination" aria-label="Records pages">
+      <span class="muted">Showing {{ firstShown() }}–{{ lastShown() }} of {{ filtered().length }}</span>
+      <div class="pages">
+        <button type="button" (click)="goTo(page() - 1)" [disabled]="page() === 1" aria-label="Previous page">‹</button>
+        @for (link of pageLinks(); track $index) {
+          @if (link === null) {
+            <span class="gap">…</span>
+          } @else {
+            <button type="button" [class.current]="link === page()" [attr.aria-current]="link === page() ? 'page' : null" (click)="goTo(link)">{{ link }}</button>
+          }
+        }
+        <button type="button" (click)="goTo(page() + 1)" [disabled]="page() === pageCount()" aria-label="Next page">›</button>
+      </div>
+    </nav>
+  }
+</section>

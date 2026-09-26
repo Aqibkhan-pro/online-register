@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { DocumentSnapshot, collection, doc, getDoc, getDocs, getFirestore, limit, query, where, writeBatch } from 'firebase/firestore/lite';
+import { DocumentSnapshot, collection, doc, getDoc, getDocs, getFirestore, limit, query, runTransaction, where, writeBatch } from 'firebase/firestore/lite';
 import { FIREBASE_APP } from '../firebase';
 import { StudentResult } from './student-result';
 
@@ -21,6 +21,23 @@ export class ResultStore {
     // A student has one result per semester, so a registration number can match several documents.
     const byRegistration = await getDocs(query(this.results, where('registrationNo', '==', key), limit(10)));
     return byRegistration.docs.map((snapshot) => toStudentResult(snapshot));
+  }
+
+  /** All results, ordered by verification code. Firestore rules only allow this unlimited read for admins. */
+  async listAll(): Promise<StudentResult[]> {
+    const all = await getDocs(this.results);
+    return all.docs.map((snapshot) => toStudentResult(snapshot));
+  }
+
+  /** Creates a result unless its verification code is already taken; resolves to false in that case. */
+  async add(result: StudentResult): Promise<boolean> {
+    const { verificationCode, ...data } = result;
+    const ref = doc(this.results, verificationCode);
+    return runTransaction(this.db, async (transaction) => {
+      if ((await transaction.get(ref)).exists()) return false;
+      transaction.set(ref, data);
+      return true;
+    });
   }
 
   /** Writes results keyed by verification code, overwriting any existing document with the same code. */

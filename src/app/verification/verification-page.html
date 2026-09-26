@@ -1,0 +1,21 @@
+<h1>Online Verification</h1>
+@if (results().length) {
+  <app-result-view [results]="results()" (back)="backToSearch()" />
+} @else {
+  <section class="verification-card" aria-labelledby="verification-label">
+    <form (submit)="verify($event)">
+      <label id="verification-label" for="verification-code">Verification Code / Registration No:</label>
+      <div class="search-field">
+        <input id="verification-code" name="verification-code" type="search" placeholder="Search here..." [(ngModel)]="verificationCode" aria-describedby="verification-status" />
+        <button type="submit" aria-label="Search verification code" [disabled]="searching()">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.7" cy="10.7" r="5.9" fill="none" stroke="currentColor" stroke-width="2"/><path d="m15.1 15.1 5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      @if (searching()) {
+        <p id="verification-status" class="status-message">Searching…</p>
+      } @else if (status()) {
+        <p id="verification-status" class="status-message" [class.error]="status()?.error">{{ status()?.text }}</p>
+      }
+    </form>
+  </section>
+}
