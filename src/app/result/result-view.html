@@ -1,0 +1,62 @@
+<section class="result-view" aria-live="polite">
+  @for (result of results(); track result.verificationCode) {
+    <article class="result">
+      <div class="verified-banner">
+        <svg class="verified-icon" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22" fill="currentColor"/><path d="m14.5 24.5 6.5 6.5 13-13" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div>
+          <h2>Result Verified</h2>
+          <p>Your result has been successfully verified.</p>
+        </div>
+      </div>
+
+      <dl class="details">
+        <dt>Verification Code</dt><dd>{{ result.verificationCode }}</dd>
+        <dt>Registration No</dt><dd>{{ result.registrationNo }}</dd>
+        <dt>Student Name</dt><dd>{{ result.studentName }}</dd>
+        <dt>Program</dt><dd>{{ result.program }}</dd>
+        <dt>Campus</dt><dd>{{ result.campus }}</dd>
+        <dt>Semester</dt><dd>{{ result.semester }}</dd>
+        <dt>Roll No</dt><dd>{{ result.rollNo }}</dd>
+      </dl>
+
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th scope="col">Subject</th><th scope="col">Credit Hours</th><th scope="col">Marks</th><th scope="col">Grade</th><th scope="col">Grade Point</th></tr>
+          </thead>
+          <tbody>
+            @for (subject of result.subjects; track $index) {
+              <tr><td>{{ subject.name }}</td><td>{{ subject.creditHours }}</td><td>{{ subject.marks }}</td><td>{{ subject.grade }}</td><td>{{ subject.gradePoint | number: '1.2-2' }}</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="summary">
+        <div><span>Semester GPA</span><strong class="gpa">{{ result.gpa | number: '1.2-2' }}</strong></div>
+        <div><span>Status</span><strong class="status" [class.fail]="!isPass(result)">{{ result.status }}</strong></div>
+      </div>
+
+      <div class="actions no-print">
+        <button type="button" class="btn btn-primary" (click)="print()">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8V3h10v5M7 17H4.5A1.5 1.5 0 0 1 3 15.5v-5A2.5 2.5 0 0 1 5.5 8h13a2.5 2.5 0 0 1 2.5 2.5v5a1.5 1.5 0 0 1-1.5 1.5H17M7 14h10v7H7v-7Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          Print Result
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="downloadPdf(result)" [disabled]="downloading() === result.verificationCode">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v3h16v-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          {{ downloading() === result.verificationCode ? 'Preparing PDF…' : 'Download PDF' }}
+        </button>
+      </div>
+    </article>
+  }
+
+  <button type="button" class="btn btn-outline no-print" (click)="back.emit()">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5m6-6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Back to Search
+  </button>
+
+  <p class="note">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M12 11v6M12 7.2v.1" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>
+    <span>This result is electronically verified.<br />For official verification, contact the university.</span>
+  </p>
+</section>
