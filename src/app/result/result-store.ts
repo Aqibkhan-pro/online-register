@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { DocumentSnapshot, collection, doc, getDoc, getDocs, getFirestore, limit, query, runTransaction, where, writeBatch } from 'firebase/firestore/lite';
+import { DocumentSnapshot, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, limit, query, runTransaction, setDoc, where, writeBatch } from 'firebase/firestore/lite';
 import { FIREBASE_APP } from '../firebase';
 import { StudentResult } from './student-result';
 
@@ -38,6 +38,17 @@ export class ResultStore {
       transaction.set(ref, data);
       return true;
     });
+  }
+
+  /** Replaces an existing record after an admin edits it. */
+  async update(result: StudentResult): Promise<void> {
+    const { verificationCode, ...data } = result;
+    await setDoc(doc(this.results, verificationCode), data);
+  }
+
+  /** Removes one verified transcript. Firestore rules restrict this operation to admins. */
+  async delete(verificationCode: string): Promise<void> {
+    await deleteDoc(doc(this.results, verificationCode));
   }
 
   /** Writes results keyed by verification code, overwriting any existing document with the same code. */

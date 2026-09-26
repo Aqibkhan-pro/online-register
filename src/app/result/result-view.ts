@@ -17,6 +17,10 @@ export class ResultView {
   readonly downloading = signal<string | null>(null);
   protected readonly isPass = isPass;
 
+  totalCreditHours(result: StudentResult): number {
+    return result.subjects.reduce((total, subject) => total + subject.creditHours, 0);
+  }
+
   print(): void {
     window.print();
   }

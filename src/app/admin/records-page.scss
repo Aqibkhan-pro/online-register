@@ -1,6 +1,6 @@
 @use 'admin';
 
-:host { display: block; width: min(1100px, 100%); margin: 0 auto; }
+:host { display: block; width: min(1200px, 106%); margin: 0 auto; }
 
 * { box-sizing: border-box; }
 
@@ -22,6 +22,7 @@ tbody tr:nth-child(even) { background: #f7faf8; }
 .code { font-weight: 600; white-space: nowrap; }
 .status { display: inline-block; padding: 2px 12px; border-radius: 999px; background: #d5eedb; color: #174c26; font-size: 13px; font-weight: 600; }
 .status.fail { background: #fbe3e1; color: #b3261e; }
+.row-actions { display: flex; gap: 7px; white-space: nowrap; }.row-actions a, .row-actions button { padding: 6px 9px; border-radius: 4px; font: 600 12px Arial, sans-serif; cursor: pointer; text-decoration: none; }.row-actions a { color: #174c26; background: #edf6ef; border: 1px solid #9fc5a9; }.row-actions button { color: #a1261d; background: #fff; border: 1px solid #dfa29c; }
 
 .pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; }
 .pagination .muted { margin: 0; }
@@ -31,3 +32,10 @@ tbody tr:nth-child(even) { background: #f7faf8; }
 .pages button:disabled { opacity: .45; cursor: default; }
 .pages button.current { background: #174c26; border-color: #174c26; color: #fff; }
 .gap { padding: 0 4px; color: #6b7a71; }
+
+.delete-backdrop { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 20px; background: rgba(8, 28, 14, .58); }
+.delete-modal { width: min(410px, 100%); padding: 29px; border-radius: 10px; background: #fff; box-shadow: 0 22px 55px rgba(0, 0, 0, .28); text-align: center; }
+.delete-icon { width: 46px; height: 46px; display: grid; place-items: center; margin: 0 auto 14px; border-radius: 50%; color: #b3261e; background: #fbe3e1; font: 700 26px Georgia, serif; }
+.delete-modal h2 { margin: 0; color: #24352a; font: 700 25px Georgia, serif; }.delete-modal > p { margin: 11px 0 18px; color: #66736a; font-size: 14px; line-height: 1.5; }
+.delete-record { display: grid; gap: 4px; padding: 12px; border-radius: 6px; background: #f4f7f5; color: #183f25; text-align: left; }.delete-record strong { font-size: 15px; }.delete-record span { color: #627067; font-size: 13px; }
+.delete-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 22px; }.delete-actions button { height: 40px; border-radius: 5px; font: 600 14px Arial, sans-serif; cursor: pointer; }.cancel-delete { color: #385044; background: #fff; border: 1px solid #c6d2c9; }.confirm-delete { color: #fff; background: #b3261e; border: 1px solid #b3261e; }.confirm-delete:hover { background: #941c16; }.delete-actions button:disabled { opacity: .6; cursor: progress; }

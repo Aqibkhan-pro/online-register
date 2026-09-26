@@ -21,7 +21,7 @@
 
   <label class="search">
     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.7" cy="10.7" r="5.9" fill="none" stroke="currentColor" stroke-width="2"/><path d="m15.1 15.1 5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-    <input class="input" type="search" placeholder="Search by code, registration no, name, program…" aria-label="Search records" [ngModel]="search()" (ngModelChange)="setSearch($event)" />
+    <input class="input" type="search" placeholder="Search by transcript no, registration no, name, program…" aria-label="Search records" [ngModel]="search()" (ngModelChange)="setSearch($event)" />
   </label>
 
   @if (loading()) {
@@ -34,18 +34,19 @@
     <div class="table-scroll">
       <table>
         <thead>
-          <tr><th scope="col">Verification Code</th><th scope="col">Registration No</th><th scope="col">Student Name</th><th scope="col">Program</th><th scope="col">Semester</th><th scope="col">GPA</th><th scope="col">Status</th></tr>
+            <tr><th scope="col">Transcript No</th><th scope="col">Registration No</th><th scope="col">Student Name</th><th scope="col">Program</th><th scope="col">Semester</th><th scope="col">GPA</th><th scope="col">Status</th><th scope="col">Actions</th></tr>
         </thead>
         <tbody>
           @for (record of pageRecords(); track record.verificationCode) {
             <tr>
-              <td class="code">{{ record.verificationCode }}</td>
+              <td class="code">{{ record.transcriptNo ?? record.verificationCode }}</td>
               <td>{{ record.registrationNo }}</td>
               <td>{{ record.studentName }}</td>
               <td>{{ record.program }}</td>
               <td>{{ record.semester }}</td>
               <td>{{ record.gpa | number: '1.2-2' }}</td>
               <td><span class="status" [class.fail]="!isPass(record)">{{ record.status }}</span></td>
+              <td class="row-actions"><a [routerLink]="['/admin/edit', record.verificationCode]">Edit</a><button type="button" (click)="openDeleteModal(record)">Delete</button></td>
             </tr>
           }
         </tbody>
@@ -66,5 +67,16 @@
         <button type="button" (click)="goTo(page() + 1)" [disabled]="page() === pageCount()" aria-label="Next page">›</button>
       </div>
     </nav>
+  }
+  @if (recordToDelete(); as record) {
+    <div class="delete-backdrop" (click)="closeDeleteModal()">
+      <section class="delete-modal" role="dialog" aria-modal="true" aria-labelledby="delete-title" (click)="$event.stopPropagation()">
+        <div class="delete-icon" aria-hidden="true">!</div>
+        <h2 id="delete-title">Delete transcript?</h2>
+        <p>This will permanently remove the selected transcript from the verification records.</p>
+        <div class="delete-record"><strong>{{ record.studentName }}</strong><span>Transcript No. {{ record.transcriptNo ?? record.verificationCode }}</span></div>
+        <div class="delete-actions"><button type="button" class="cancel-delete" (click)="closeDeleteModal()" [disabled]="deleting()">Cancel</button><button type="button" class="confirm-delete" (click)="confirmDelete()" [disabled]="deleting()">{{ deleting() ? 'Deleting…' : 'Yes, delete' }}</button></div>
+      </section>
+    </div>
   }
 </section>

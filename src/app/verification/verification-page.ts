@@ -22,7 +22,7 @@ export class VerificationPage {
     event.preventDefault();
     const term = this.verificationCode.trim();
     if (!term) {
-      this.status.set({ text: 'Please enter a verification code or registration number.', error: true });
+      this.status.set({ text: 'Please enter a transcript number or registration number.', error: true });
       return;
     }
 

@@ -32,7 +32,7 @@ export class DummyDataButton {
     try {
       await this.resultStore.save(DUMMY_RESULTS);
       this.finished.emit({
-        text: `${DUMMY_RESULTS.length} dummy records saved. Try ${DUMMY_RESULTS[0].verificationCode}, or ${DUMMY_RESULTS[1].registrationNo} for two semesters.`,
+        text: `${DUMMY_RESULTS.length} dummy records saved. Try transcript no. ${DUMMY_RESULTS[0].verificationCode}, or ${DUMMY_RESULTS[1].registrationNo} for two semesters.`,
         error: false
       });
     } catch (error) {

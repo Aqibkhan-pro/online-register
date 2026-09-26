@@ -1,40 +1,12 @@
-:host { display: block; }
-
+:host { display: block; min-height: 100dvh; }
 * { box-sizing: border-box; }
-
-// Whole page fits in one screen: header + footer take their natural height, main fills the rest.
-// Vertical spacing uses vh clamps so shorter laptop screens still fit without a scrollbar.
-.site-shell { min-height: 100dvh; display: flex; flex-direction: column; color: #060606; background: #fff; font-family: Poppins, Arial, sans-serif; }
-
-.topbar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; padding: clamp(8px, 1.6vh, 16px) clamp(16px, 2vw, 32px); background: #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, .2); position: relative; z-index: 1; }
-.brand { justify-self: start; display: inline-flex; align-items: center; gap: 8px; color: #237b3d; text-decoration: none; }
-.brand-mark { width: clamp(64px, 11vh, 100px); height: auto; aspect-ratio: 1; flex: none; }
-.brand-copy { display: flex; flex-direction: column; font: 500 clamp(21px, 3.3vh, 30px)/.95 Arial, sans-serif; letter-spacing: -.03em; }
-.brand-copy span { font-size: .72em; font-weight: 600; }
-.brand-copy strong { font-weight: 500; white-space: nowrap; }
-.brand-copy em { font-size: 1.48em; font-style: normal; letter-spacing: -.05em; }
-.nav-links { display: flex; align-items: center; gap: clamp(20px, 2vw, 34px); font-size: 17px; line-height: 1.2; white-space: nowrap; }
-.nav-links a { color: #060606; text-decoration: none; transition: color .2s; }
-.nav-links a:hover, .nav-links .active { color: #0068e9; }
-.verification-link { display: inline-flex; align-items: center; gap: 10px; }
-.verification-link svg { width: 22px; height: 22px; }
-
-.header-actions { justify-self: end; display: flex; gap: 10px; }
-.header-button { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid #237b3d; border-radius: 999px; background: #fff; color: #237b3d; font: 500 14px Poppins, Arial, sans-serif; text-decoration: none; white-space: nowrap; cursor: pointer; transition: background .2s; }
-.header-button:hover { background: #edf6ef; }
-.header-button svg { width: 18px; height: 18px; }
-
-// Each routed page positions itself (the verification page centers vertically, admin pages sit at the top).
-.page-content { flex: 1; display: flex; flex-direction: column; padding: clamp(16px, 3vh, 40px) 16px; }
-
-.site-footer { background: #174c26; color: #fff; padding: clamp(18px, 3.2vh, 30px) 16px clamp(12px, 2.4vh, 22px); }
-.footer-content { display: grid; grid-template-columns: repeat(3, auto); justify-content: center; gap: 24px clamp(40px, 6vw, 96px); }
-.site-footer h2 { margin: 0 0 clamp(10px, 2vh, 18px); font-size: 17px; font-weight: 600; line-height: 1.2; }
-.site-footer a, .site-footer p { display: block; margin: 0 0 clamp(4px, 1vh, 8px); color: #fff; font-size: 15px; line-height: 1.5; text-decoration: none; }
-.site-footer a:hover { text-decoration: underline; }
-.contact-info a, .contact-info p { display: flex; align-items: center; gap: 10px; }
-.icon { width: 18px; height: 18px; flex: none; }
-
-@media (max-width: 1200px) { .topbar { grid-template-columns: auto 1fr auto; } .nav-links { justify-self: end; flex-wrap: wrap; justify-content: flex-end; row-gap: 8px; } }
-@media (max-width: 900px) { .topbar { grid-template-columns: 1fr; gap: 14px; } .topbar > * { justify-self: center; } .nav-links { flex-wrap: wrap; justify-content: center; gap: 12px 24px; } .footer-content { grid-template-columns: repeat(2, auto); } }
-@media (max-width: 600px) { .nav-links { font-size: 15px; } .footer-content { grid-template-columns: 1fr; justify-content: start; } }
+.site-shell { min-height: 100dvh; display: flex; flex-direction: column; background: #fff; color: #111; }
+.topbar { min-height: 150px; display: flex; align-items: center; padding: 17px 7%; background: #fff; box-shadow: 0 3px 7px rgba(0, 0, 0, .24); position: relative; z-index: 1; }
+.brand { width: 350px; display: inline-flex; align-items: center; gap: 8px; color: #237b3d; text-decoration: none; }
+.brand-mark { width: 105px; height: 105px; flex: none; }.brand-copy { display: flex; flex-direction: column; font-family: Arial, sans-serif; line-height: .95; letter-spacing: -.8px; }.brand-copy span { font-size: 24px; font-weight: 600; }.brand-copy strong { font-size: 33px; font-weight: 500; white-space: nowrap; }.brand-copy em { font-size: 49px; font-weight: 500; font-style: normal; letter-spacing: -2px; }
+.nav-links { display: flex; align-items: center; gap: 30px; margin-left: auto; white-space: nowrap; }.nav-links a { color: #080808; text-decoration: none; font: 19px/1.2 "Trebuchet MS", Arial, sans-serif; }.nav-links a:hover { color: #0068e9; }.verification-link { display: inline-flex; align-items: center; gap: 11px; }.verification-link svg { width: 23px; height: 23px; }.nav-links .sign-in { display: inline-flex; align-items: center; gap: 9px; margin-left: clamp(10px, 12vw, 210px); padding: 10px 19px; color: #147136; border: 1px solid #147136; border-radius: 999px; font-size: 17px; }.nav-links .sign-in:hover { color: #0e5b2a; background: #f0f8f2; }.sign-in svg { width: 19px; height: 19px; }
+.router-content { flex: 1; display: flex; flex-direction: column; padding: 22px max(20px, calc((100% - 1100px) / 2)); background: #fff; }
+.site-footer { background: #174c26; color: #fff; padding: 27px 20px 18px; }.footer-content { width: min(1118px, 100%); margin: 0 auto; display: grid; grid-template-columns: 1.3fr .75fr 1.2fr; gap: 72px; }.site-footer h2 { margin: 0 0 22px; font: 700 18px/1.2 Arial, sans-serif; }.site-footer a, .site-footer p { display: block; margin: 0 0 11px; color: #fff; font: 17px/1.2 "Trebuchet MS", Arial, sans-serif; text-decoration: none; }.site-footer a:hover { text-decoration: underline; }.contact-info p { white-space: nowrap; }.icon { display: inline-block; width: 28px; font-family: Arial, sans-serif; font-size: 20px; text-align: left; }.contact-info p .icon { font-size: 14px; vertical-align: 2px; }
+@media (max-width: 1250px) { .nav-links .sign-in { margin-left: 10px; } }
+@media (max-width: 1000px) { .topbar { padding: 18px 5%; flex-direction: column; gap: 18px; }.nav-links { margin: 0; flex-wrap: wrap; justify-content: center; gap: 16px 25px; }.router-content { padding: 26px 18px; } }
+@media (max-width: 650px) { .brand { width: auto; }.brand-mark { width: 76px; height: 76px; }.brand-copy span { font-size: 18px; }.brand-copy strong { font-size: 25px; }.brand-copy em { font-size: 37px; }.nav-links a { font-size: 16px; }.footer-content { grid-template-columns: 1fr; gap: 22px; }.site-footer h2 { margin-bottom: 16px; }.site-footer a, .site-footer p { font-size: 16px; }.contact-info p { white-space: normal; } }

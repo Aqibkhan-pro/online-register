@@ -1,57 +1,28 @@
 <section class="panel">
-  <div class="panel-head">
-    <div>
-      <h1>Add Record</h1>
-      <p class="muted">Grades, grade points, GPA and status are calculated from the marks.</p>
-    </div>
-    <a class="btn btn-outline" routerLink="/admin">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5m6-6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Back to Records
-    </a>
-  </div>
-
+  <div class="panel-head"><div><h1>{{ editing() ? 'Edit Complete Transcript' : 'Add Complete Transcript' }}</h1><p class="muted">One student record can contain all eight semesters.</p></div><a class="btn btn-outline" routerLink="/admin">Back to Records</a></div>
   <form [formGroup]="form" (ngSubmit)="save()">
-    <h2>Student Details</h2>
+    <div class="details-heading"><h2>Student Details</h2><button type="button" class="btn btn-outline fill-details" (click)="loadWisalKhanDetails()">Fill Wisal Khan details</button></div>
     <div class="fields">
-      <label>Verification Code<input class="input" formControlName="verificationCode" placeholder="UOL-2026-00125" /><small>Letters, numbers and dashes only.</small></label>
-      <label>Registration No<input class="input" formControlName="registrationNo" placeholder="2026-BCS-00125" /></label>
-      <label>Student Name<input class="input" formControlName="studentName" /></label>
-      <label>Program<input class="input" formControlName="program" placeholder="BS Computer Science" /></label>
-      <label>Campus<input class="input" formControlName="campus" placeholder="Lahore" /></label>
-      <label>Semester<input class="input" formControlName="semester" placeholder="Spring 2026" /></label>
-      <label>Roll No<input class="input" formControlName="rollNo" placeholder="CS-125" /></label>
+      <label>Transcript No<input class="input" formControlName="transcriptNo" placeholder="F5435638" [readonly]="editing()" /></label><label>Date of Issue<input class="input" formControlName="issueDate" placeholder="July 05, 2026" /></label><label>Registration No<input class="input" formControlName="registrationNo" placeholder="3482552" /></label><label>Student Name<input class="input" formControlName="studentName" /></label><label>Father's Name<input class="input" formControlName="fatherName" /></label><label>Date of Birth<input class="input" formControlName="dateOfBirth" /></label><label>Date of Admission<input class="input" formControlName="dateOfAdmission" /></label><label>Date of Graduation<input class="input" formControlName="dateOfGraduation" /></label><label>Session<input class="input" formControlName="session" /></label><label>Program<input class="input" formControlName="program" /></label><label>Department<input class="input" formControlName="department" /></label><label>Campus<input class="input" formControlName="campus" /></label><label>Roll No<input class="input" formControlName="rollNo" /></label>
     </div>
 
-    <h2>Subjects</h2>
-    <div class="subjects" formArrayName="subjects">
-      <div class="subject-row subject-head" aria-hidden="true">
-        <span>Subject</span><span>Credit Hours</span><span>Marks</span><span>Grade</span><span>Grade Point</span><span></span>
-      </div>
-      @for (subject of subjects.controls; track subject; let i = $index) {
-        <div class="subject-row" [formGroupName]="i">
-          <input class="input" formControlName="name" placeholder="Subject name" aria-label="Subject name" />
-          <input class="input" formControlName="creditHours" type="number" min="1" max="6" aria-label="Credit hours" />
-          <input class="input" formControlName="marks" type="number" min="0" max="100" placeholder="0–100" aria-label="Marks" />
-          <span class="computed" data-label="Grade ">{{ grades()[i]?.grade ?? '—' }}</span>
-          <span class="computed" data-label="GP ">{{ (grades()[i]?.gradePoint | number: '1.2-2') ?? '—' }}</span>
-          <button type="button" class="remove" (click)="removeSubject(i)" [disabled]="subjects.length === 1" aria-label="Remove subject">×</button>
-        </div>
+    <div class="semester-heading"><h2>Semester-wise Subjects</h2><div class="semester-actions"><button type="button" class="btn btn-outline" (click)="loadDummySemesters()">Load 8-Semester Dummy</button><button type="button" class="btn btn-primary" (click)="addSemester()">+ Add Semester</button></div></div>
+    <div class="semesters" formArrayName="semesters">
+      @for (semester of semesters.controls; track semester; let semesterIndex = $index) {
+        <section class="semester-card" [formGroupName]="semesterIndex">
+          <div class="semester-title"><label>Semester Name<input class="input" formControlName="name" placeholder="Semester First" /></label><button type="button" class="remove-semester" (click)="removeSemester(semesterIndex)" [disabled]="semesters.length === 1">Remove semester</button></div>
+          <div class="subjects" formArrayName="subjects">
+            <div class="subject-row subject-head" aria-hidden="true"><span>Code</span><span>Subject</span><span>Cr.Hrs</span><span>Grade</span><span>Grade Point</span><span></span></div>
+            @for (subject of subjectsAt(semesterIndex).controls; track subject; let subjectIndex = $index) {
+              <div class="subject-row" [formGroupName]="subjectIndex"><input class="input" formControlName="code" placeholder="EN-101" aria-label="Subject code" /><input class="input" formControlName="name" placeholder="Subject name" aria-label="Subject name" /><input class="input" formControlName="creditHours" type="number" min="1" max="6" aria-label="Credit hours" /><input class="input" formControlName="grade" placeholder="A1" aria-label="Grade" /><span class="computed" data-label="GP ">{{ (gradeAt(semesterIndex, subjectIndex) | number: '1.2-2') ?? '—' }}</span><button type="button" class="remove" (click)="removeSubject(semesterIndex, subjectIndex)" [disabled]="subjectsAt(semesterIndex).length === 1" aria-label="Remove subject">×</button></div>
+            }
+            <button type="button" class="btn btn-outline add-subject" (click)="addSubject(semesterIndex)">+ Add Subject</button>
+          </div>
+        </section>
       }
-      <button type="button" class="btn btn-outline add-subject" (click)="addSubject()">+ Add Subject</button>
     </div>
-
-    <div class="summary">
-      <div><span>Semester GPA</span><strong>{{ summary() ? (summary()!.gpa | number: '1.2-2') : '—' }}</strong></div>
-      <div><span>Status</span><strong [class.fail]="summary()?.status === 'FAIL'">{{ summary()?.status ?? '—' }}</strong></div>
-    </div>
-
-    @if (error()) {
-      <p class="form-error" role="alert">{{ error() }}</p>
-    }
-
-    <div class="form-actions">
-      <a class="btn btn-outline" routerLink="/admin">Cancel</a>
-      <button type="submit" class="btn btn-primary" [disabled]="saving()">{{ saving() ? 'Saving…' : 'Save Record' }}</button>
-    </div>
+    <div class="summary"><div><span>Overall GPA</span><strong>{{ summary() ? (summary()!.gpa | number: '1.2-2') : '—' }}</strong></div><div><span>Status</span><strong [class.fail]="summary()?.status === 'FAIL'">{{ summary()?.status ?? '—' }}</strong></div></div>
+    @if (error()) { <p class="form-error" role="alert">{{ error() }}</p> }
+    <div class="form-actions"><a class="btn btn-outline" routerLink="/admin">Cancel</a><button type="submit" class="btn btn-primary" [disabled]="saving()">{{ saving() ? 'Saving…' : editing() ? 'Update Transcript' : 'Save Complete Transcript' }}</button></div>
   </form>
 </section>

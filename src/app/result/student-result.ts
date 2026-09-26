@@ -1,9 +1,18 @@
 export interface SubjectResult {
+  /** University course code, for example EN-101. */
+  code?: string;
   name: string;
   creditHours: number;
-  marks: number;
+  /** Kept optional so records imported from the old marks-based format remain readable. */
+  marks?: number;
   grade: string;
   gradePoint: number;
+}
+
+/** A named semester and every course recorded under it in one transcript. */
+export interface SemesterResult {
+  name: string;
+  subjects: SubjectResult[];
 }
 
 /**
@@ -18,6 +27,16 @@ export interface StudentResult {
   campus: string;
   semester: string;
   rollNo: string;
+  transcriptNo?: string;
+  issueDate?: string;
+  fatherName?: string;
+  dateOfBirth?: string;
+  dateOfAdmission?: string;
+  dateOfGraduation?: string;
+  session?: string;
+  department?: string;
+  /** New transcript format: one verified record can hold every semester. */
+  semesters?: SemesterResult[];
   subjects: SubjectResult[];
   gpa: number;
   status: string;

@@ -33,12 +33,14 @@ export class RecordsPage {
   readonly notice = signal(this.addedCode ? `Record ${this.addedCode} was added.` : '');
   readonly search = signal('');
   readonly page = signal(1);
+  readonly recordToDelete = signal<StudentResult | null>(null);
+  readonly deleting = signal(false);
 
   readonly filtered = computed(() => {
     const term = this.search().trim().toLowerCase();
     if (!term) return this.records();
     return this.records().filter((r) =>
-      [r.verificationCode, r.registrationNo, r.studentName, r.program, r.semester, r.rollNo].some((value) => value.toLowerCase().includes(term))
+      [r.transcriptNo ?? r.verificationCode, r.registrationNo, r.studentName, r.program, r.semester, r.rollNo].some((value) => value.toLowerCase().includes(term))
     );
   });
   readonly pageCount = computed(() => Math.max(1, Math.ceil(this.filtered().length / PAGE_SIZE)));
@@ -87,5 +89,29 @@ export class RecordsPage {
     }
     this.notice.set(status.text);
     void this.load();
+  }
+
+  openDeleteModal(record: StudentResult): void {
+    this.recordToDelete.set(record);
+  }
+
+  closeDeleteModal(): void {
+    if (!this.deleting()) this.recordToDelete.set(null);
+  }
+
+  async confirmDelete(): Promise<void> {
+    const record = this.recordToDelete();
+    if (!record) return;
+    this.deleting.set(true);
+    this.error.set('');
+    try {
+      await this.store.delete(record.verificationCode);
+      this.notice.set(`Transcript ${record.transcriptNo ?? record.verificationCode} was deleted.`);
+      this.recordToDelete.set(null);
+      await this.load();
+    } catch (error) {
+      console.error('Deleting record failed', error);
+      this.error.set('Could not delete this record. Check Firestore admin permissions.');
+    } finally { this.deleting.set(false); }
   }
 }

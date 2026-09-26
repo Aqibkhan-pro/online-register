@@ -11,6 +11,17 @@ export function gradeFor(marks: number): Pick<SubjectResult, 'grade' | 'gradePoi
   return { grade, gradePoint };
 }
 
+/** Grade-point lookup for manual transcript entry (A1/A2 and common HEC letter grades). */
+export function gradePointFor(grade: string): number | null {
+  const points: Record<string, number> = {
+    A1: 4, A2: 3.67, A3: 3.33, B1: 3, B2: 2.67, B3: 2.33,
+    C1: 2, C2: 1.67, C3: 1.33, D: 1, F: 0,
+    A: 4, 'A-': 3.67, 'B+': 3.33, B: 3, 'B-': 2.67,
+    'C+': 2.33, C: 2, 'C-': 1.67, 'D+': 1.33
+  };
+  return points[grade.trim().toUpperCase()] ?? null;
+}
+
 /** Credit-weighted GPA rounded to 2 decimals; a GPA of 2.00 or more is a pass. */
 export function summarize(subjects: SubjectResult[]): Pick<StudentResult, 'gpa' | 'status'> {
   const credits = subjects.reduce((sum, s) => sum + s.creditHours, 0);

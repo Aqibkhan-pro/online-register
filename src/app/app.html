@@ -1,78 +1,32 @@
 <div class="site-shell">
-  <header class="topbar no-print">
+  <header class="topbar">
     <a class="brand" routerLink="/" aria-label="University of Lahore home">
       <svg class="brand-mark" viewBox="0 0 100 100" aria-hidden="true">
-        <circle cx="50" cy="50" r="47" fill="none" stroke="currentColor" stroke-width="1.2"/>
-        <path d="M17 75c14-2 22 10 38 8 13-2 19-12 29-8-12 10-27 15-43 14-10-1-18-6-24-14Z" fill="currentColor" opacity=".8"/>
-        <path d="M22 78c15 2 24 10 39 7 10-2 16-8 22-7M26 83c14 1 21 7 34 5 9-1 15-5 20-5" fill="none" stroke="#fff" stroke-width="1.1" opacity=".9"/>
-        <path d="M48 72h5l-2-43h-1l-2 43ZM46 29h9l-2-5h-5l-2 5Zm1-7h7l-3.5-7-3.5 7Zm-1 43h9l2 8H44l2-8Zm-2-26h13M43 47h15M42 55h17" fill="currentColor"/>
-        <path d="M49 28v35m3-35v35M46 38h7m-8 9h10m-11 8h13" stroke="#fff" stroke-width=".7" opacity=".9"/>
+        <circle cx="50" cy="50" r="47" fill="none" stroke="currentColor" stroke-width="1.2" />
+        <path d="M17 75c14-2 22 10 38 8 13-2 19-12 29-8-12 10-27 15-43 14-10-1-18-6-24-14Z" fill="currentColor" opacity=".8" />
+        <path d="M22 78c15 2 24 10 39 7 10-2 16-8 22-7M26 83c14 1 21 7 34 5 9-1 15-5 20-5" fill="none" stroke="#fff" stroke-width="1.1" opacity=".9" />
+        <path d="M48 72h5l-2-43h-1l-2 43ZM46 29h9l-2-5h-5l-2 5Zm1-7h7l-3.5-7-3.5 7Zm-1 43h9l2 8H44l2-8Zm-2-26h13M43 47h15M42 55h17" fill="currentColor" />
+        <path d="M49 28v35m3-35v35M46 38h7m-8 9h10m-11 8h13" stroke="#fff" stroke-width=".7" opacity=".9" />
       </svg>
       <span class="brand-copy"><span>THE</span><strong>UNIVERSITY OF</strong><em>LAHORE</em></span>
     </a>
-
     <nav class="nav-links" aria-label="Primary navigation">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
-      <a href="#admissions">Admissions</a>
-      <a href="#uol">UOL</a>
-      <a class="verification-link" routerLink="/">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 8.6 12 4l9.5 4.6L12 13 2.5 8.6Zm3.2 2.2v5.5L12 20l6.3-3.7v-5.5L12 14l-6.3-3.2ZM20 10.1v5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
-        Online Verification
-      </a>
+      <a routerLink="/">Home</a>
+      <a href="https://uol.edu.pk/admissions" target="_blank" rel="noopener">Admissions</a>
+      <a href="https://uol.edu.pk" target="_blank" rel="noopener">UOL</a>
+      <a class="verification-link" routerLink="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 8.6 12 4l9.5 4.6L12 13 2.5 8.6Zm3.2 2.2v5.5L12 20l6.3-3.7v-5.5L12 14l-6.3-3.2ZM20 10.1v5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" /></svg>Online Verification</a>
       <a href="#contact">Contact us</a>
+      <a class="sign-in" routerLink="/login"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5.5 20c.6-4 2.8-6 6.5-6s5.9 2 6.5 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Sign in</a>
     </nav>
-
-    <div class="header-actions">
-      @if (auth.isAdmin()) {
-        <a class="header-button" routerLink="/admin">Admin Panel</a>
-        <button type="button" class="header-button" (click)="signOut()">Sign out</button>
-      } @else if (auth.user() !== undefined) {
-        <a class="header-button" routerLink="/login">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></g></svg>
-          Sign in
-        </a>
-      }
-    </div>
   </header>
 
-  <main id="verification" class="page-content">
-    <router-outlet />
-  </main>
+  <main class="router-content"><router-outlet /></main>
 
-  <footer id="contact" class="site-footer no-print">
+  <footer id="contact" class="site-footer">
     <div class="footer-content">
-      <section>
-        <h2>Faculties</h2>
-        <a href="#humanities">Faculty of Humanities and Social Sciences</a>
-        <a href="#science">Faculty of Science</a>
-        <a href="#engineering">Faculty of Engineering</a>
-        <a href="#health">Health and Medical Sciences</a>
-      </section>
-      <section>
-        <h2>Important Links</h2>
-        <a routerLink="/">Home</a>
-        <a href="#result">Result</a>
-        <a href="#contact">Contact</a>
-      </section>
-      <section class="contact-info">
-        <h2>Contact Info</h2>
-        <a href="https://uol.edu.pk">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.6 3.6 5.6 3.6 9s-1.2 6.4-3.6 9c-2.4-2.6-3.6-5.6-3.6-9S9.6 5.6 12 3Z"/></g></svg>
-          uoledu.com
-        </a>
-        <a href="mailto:info@uoledu.com">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></g></svg>
-          info&#64;uoledu.com
-        </a>
-        <p>
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s-7-6.4-7-12a7 7 0 0 1 14 0c0 5.6-7 12-7 12Zm0-9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" fill="currentColor" fill-rule="evenodd"/></svg>
-          1 – KM Defence Road, Lahore
-        </p>
-        <p>
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s-7-6.4-7-12a7 7 0 0 1 14 0c0 5.6-7 12-7 12Zm0-9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" fill="currentColor" fill-rule="evenodd"/></svg>
-          10 km Lahore – Sargodha Road, Sargodha
-        </p>
-      </section>
+      <section><h2>Faculties</h2><a href="https://uol.edu.pk">Faculty of Humanities and Social Sciences</a><a href="https://uol.edu.pk">Faculty of Science</a><a href="https://uol.edu.pk">Faculty of Engineering</a><a href="https://uol.edu.pk">Health and Medical Sciences</a></section>
+      <section><h2>Important Links</h2><a routerLink="/">Home</a><a routerLink="/">Result</a><a routerLink="/login">Admin Sign In</a></section>
+      <section class="contact-info"><h2>Contact Info</h2><a href="https://uol.edu.pk"><span class="icon">◎</span>uoledu.com</a><a href="mailto:info@uoledu.com"><span class="icon">✉</span>info@uoledu.com</a><p><span class="icon">●</span>1 – KM Defence Road, Lahore</p><p><span class="icon">●</span>10 km Lahore – Sargodha Road, Sargodha</p></section>
     </div>
   </footer>
 </div>
