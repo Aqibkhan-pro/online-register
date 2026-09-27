@@ -34,7 +34,7 @@
     <div class="table-scroll">
       <table>
         <thead>
-            <tr><th scope="col">Transcript No</th><th scope="col">Registration No</th><th scope="col">Student Name</th><th scope="col">Program</th><th scope="col">Semester</th><th scope="col">GPA</th><th scope="col">Status</th><th scope="col">Actions</th></tr>
+            <tr><th scope="col">Transcript No</th><th scope="col">Registration No</th><th scope="col">Student Name</th><th scope="col">Program</th><th scope="col">CGPA</th><th scope="col">Status</th><th scope="col">Actions</th></tr>
         </thead>
         <tbody>
           @for (record of pageRecords(); track record.verificationCode) {
@@ -43,7 +43,6 @@
               <td>{{ record.registrationNo }}</td>
               <td>{{ record.studentName }}</td>
               <td>{{ record.program }}</td>
-              <td>{{ record.semester }}</td>
               <td>{{ record.gpa | number: '1.2-2' }}</td>
               <td><span class="status" [class.fail]="!isPass(record)">{{ record.status }}</span></td>
               <td class="row-actions"><a [routerLink]="['/admin/edit', record.verificationCode]">Edit</a><button type="button" (click)="openDeleteModal(record)">Delete</button></td>

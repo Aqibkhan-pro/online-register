@@ -40,7 +40,7 @@ export class RecordsPage {
     const term = this.search().trim().toLowerCase();
     if (!term) return this.records();
     return this.records().filter((r) =>
-      [r.transcriptNo ?? r.verificationCode, r.registrationNo, r.studentName, r.program, r.semester, r.rollNo].some((value) => value.toLowerCase().includes(term))
+      [r.transcriptNo ?? r.verificationCode, r.registrationNo, r.studentName, r.program, r.rollNo].some((value) => value.toLowerCase().includes(term))
     );
   });
   readonly pageCount = computed(() => Math.max(1, Math.ceil(this.filtered().length / PAGE_SIZE)));

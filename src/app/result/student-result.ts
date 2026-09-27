@@ -16,7 +16,7 @@ export interface SemesterResult {
 }
 
 /**
- * One semester result. Stored in the Firestore `results` collection with the verification code
+ * One verified final result. Stored in the Firestore `results` collection with the verification code
  * as the document ID, so `verificationCode` comes from the ID rather than a stored field.
  */
 export interface StudentResult {
@@ -25,7 +25,8 @@ export interface StudentResult {
   studentName: string;
   program: string;
   campus: string;
-  semester: string;
+  /** Legacy course-record field. New records store only the final CGPA. */
+  semester?: string;
   rollNo: string;
   transcriptNo?: string;
   issueDate?: string;
@@ -35,9 +36,9 @@ export interface StudentResult {
   dateOfGraduation?: string;
   session?: string;
   department?: string;
-  /** New transcript format: one verified record can hold every semester. */
+  /** Legacy course-record fields retained so existing Firestore documents can still be read. */
   semesters?: SemesterResult[];
-  subjects: SubjectResult[];
+  subjects?: SubjectResult[];
   gpa: number;
   status: string;
 }
